@@ -1,0 +1,28 @@
+@url=http://localhost:5170
+@token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6Ii91anRRQTJrK0ZSalRZWC9JaXREdzJhNzAySFVvMEVkajhVaEU0SGVwV2dCMTN6ZTh1VFU4WHZqZnNOMGM2VFlnMXlVTzNoTFZXTU0yVE9LYS9IcjdzQXp3RmJrb1lOOExuVFRPVHg5OVRRPSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcHJpbWFyeWdyb3Vwc2lkIjoiMjA0IiwiQnJhbmNoSWQiOiIxMjA3MDA5IiwianRpIjoiNjFiNWQ5N2UtOGZjYi00OTY1LTkzNDgtOGQ0NDE2OGYwZmYyIiwibmJmIjoxNzY1Mjc3ODM4LCJleHAiOjE3NzMwNTM4MzgsImlzcyI6Imh0dHBzOi8vZWR1Y2F0aW9uLmRlbGhpLmdvdi5pbiIsImF1ZCI6IlVzZXJzIn0.Wu7panFhFmJ1t8lMJu7VEsymBz2iAxjoUWXWkemWg3o
+
+####
+POST {{url}}/smc/budget/add
+Content-Type: application/json
+X-Client-Type: mobile
+Authorization: Bearer {{token}}
+
+{
+  "schoolId": "1207009",
+  "amount": 5000,
+  "allocationType": 0
+}
+
+###
+
+GET {{url}}/smc/budget/get/1207009
+X-Client-Type: mobile
+Authorization: Bearer {{token}}
+
+###
+
+GET {{url}}/smc/budget/track/1207009
+X-Client-Type: mobile
+Authorization: Bearer {{token}}
+
+###Add transaction

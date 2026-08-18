@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: edumis-backend
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /swagger/v1/swagger.json
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__edumisConStr
+        fromDatabase:
+          name: edumis-db
+          property: connectionString
+      - key: JWTAuth__ValidIssuer
+        value: https://education.delhi.gov.in
+      - key: JWTAuth__ValidAudience
+        value: Users
+      - key: JWTAuth__Secret
+        generateValue: true
+      - key: JWTAuth__AccessTokenExpirationMinutes
+        value: "15"
+      - key: JWTAuth__RefreshTokenExpirationDays
+        value: "7"
+      - key: Cors__AllowedOrigins__0
+        value: http://localhost:3000
+      - key: Cors__AllowedOrigins__1
+        value: https://localhost:3000
+      - key: Cors__AllowedOrigins__2
+        value: https://education.delhi.gov.in
+      - key: GOOGLE_APPLICATION_CREDENTIALS
+        value: /etc/secrets/smc-service-account.json
+
+databases:
+  - name: edumis-db
+    plan: free
+    databaseName: edumisdb
+    user: postgres
+    region: oregon

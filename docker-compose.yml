@@ -1,0 +1,42 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: edumis_backend
+    ports:
+      - "5170:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ConnectionStrings__edumisConStr=Server=postgres;Database=edumisdb;Port=5432;User Id=postgres;Password=postgres;
+      - JWTAuth__ValidIssuer=https://education.delhi.gov.in
+      - JWTAuth__ValidAudience=Users
+      - JWTAuth__Secret=U7y9Fex3uZkMqPLQrTQpiiMslUEMI9YgmBh+dOlgVgM=
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: edumis_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: edumisdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d edumisdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

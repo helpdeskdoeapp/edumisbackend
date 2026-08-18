@@ -1,0 +1,36 @@
+@url=http://192.168.0.102:5170/api
+@authToken=
+@accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQXNoaXNoICBCaXNodCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiRTl3TlJaQTNLT3UvQjd0ajNEaUNaRHczZEkwMHdNaU9LeEt2RmV2dnRWbXVwcHQwVzRCZmFoY1d4UzZqZFB5RXg4L01lVG5JUHpKNjMwQ2lYZDZMNG85OU1sNnZiWXNGbktiU3U3VENZYjA9IiwiQnJhbmNoIjoiMjAyNjAwNSIsIlVzZXJUeXBlIjoiMjA2IiwiVXNlclJvbGUiOiIzMTUiLCJqdGkiOiIyMDU0ZGYyNy05NGQ1LTQ2ODYtOWY4NC1mMjFkNzRkZjYyOGYiLCJuYmYiOjE3NzIwOTY4MTMsImV4cCI6MTc3MjA5NzA1MywiaXNzIjoiaHR0cHM6Ly9lZHVjYXRpb24uZGVsaGkuZ292LmluIiwiYXVkIjoiVXNlcnMifQ.NHt1PPrkdUVtBFDyTHNXlimpFgC4wdjslwuSEtiloc4
+@refreshToken=hEPtn%2FHKArTnTczF1%2BSTmoFh%2FiromWSE3CjJ7etMK1c%3D
+###
+#POST https://edustud.nic.in/MOBAPPSERVICE/EDUWEBSERVICE/WEBAPPSMOB.ASMX/SubmitAttendances
+#Content-Type: application/x-www-form-urlencoded
+#
+#EMPID=20191212&
+#type=government&
+#schid=1207009&,
+#CurrentClass=12&
+#Section=A&
+#password=Mob#5873737t@Zr&
+#xml="UPDATE VigiITBranch..vigi_emp_master set div_branch='Office of DDE North (N)' where vig_id='37433'",
+
+
+###
+POST {{url}}/Auth/login
+Content-Type: application/json
+
+{
+  "userName": "20192794",
+  "password": "password"
+}
+###
+GET {{url}}/Auth/accesstoken
+Authorization: Bearer {{authToken}}
+###
+POST {{url}}/Auth/refresh-token
+Cookie: refreshToken={{refreshToken}};
+###
+
+GET {{url}}/Auth/userdetails
+Authorization: Bearer {{accessToken}}
+

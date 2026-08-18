@@ -1,0 +1,35 @@
+﻿namespace edumis.Models;
+
+public enum SMCMemberType
+{
+    HOS = 801,
+    CHAIRPERSON = 802,
+    STAFF_MEMBER = 803,
+    PARENT = 804,
+    SOCIAL_WORKER = 805,
+    REPRESENTATIVE = 806,
+    PUBLIC = 807,
+    VICE_CHAIRPERSON = 808
+}
+
+public enum SMCMeetingStatus
+{
+    ACTIVE = 901,    
+    CANCELLED = 902,
+    CONCLUDED = 903
+}
+
+public enum SMS_PURPOSE
+{
+    OTP_SMS = 1801,
+    REGISTRATION_SMS = 1802,
+    APPROVED_BY_ADMIN_SMS = 1803,
+    REJECTED_BY_ADMIN_SMS = 1804,
+    DATA_CORRECTION_SMS = 1805,
+    FEE_PAY_SMS = 1806
+}
+
+public enum SMC_BUDGET_ALLOCATION_TYPE {
+    ALLOCATION = 2301,
+    DONATION = 2302
+}
