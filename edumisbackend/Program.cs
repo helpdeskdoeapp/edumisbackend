@@ -12,7 +12,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
 using edumisbackend.Common;
+using Npgsql;
 using Scalar.AspNetCore;
+
 
 // Disable inotify FileSystemWatcher to prevent hitting Linux inotify limits in container environments (e.g. Render)
 Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "true");
@@ -47,7 +49,15 @@ builder.WebHost.ConfigureKestrel(options => options.AddServerHeader = false );
 builder.Services.AddTransient<GlobalExceptionHandler>();//register the exception handling middleware
 
 // Add services to the container.
-builder.Services.AddDbContext<ApplicationDBContext>(options=>options.UseNpgsql(builder.Configuration.GetConnectionString("edumisConStr")));
+var rawConnectionString = builder.Configuration.GetConnectionString("edumisConStr")
+    ?? builder.Configuration["DATABASE_URL"]
+    ?? string.Empty;
+
+var effectiveConnectionString = FormatPostgresConnectionString(rawConnectionString);
+
+builder.Services.AddDbContext<ApplicationDBContext>(options =>
+    options.UseNpgsql(effectiveConnectionString));
+
 
 
 builder.Services.AddScoped<SingleFileUpload>();
@@ -197,4 +207,38 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+static string FormatPostgresConnectionString(string? connectionString)
+{
+    if (string.IsNullOrWhiteSpace(connectionString))
+        return string.Empty;
+
+    if (connectionString.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) ||
+        connectionString.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
+    {
+        var uri = new Uri(connectionString);
+        var userInfo = uri.UserInfo.Split(':', 2);
+        var username = Uri.UnescapeDataString(userInfo[0]);
+        var password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : string.Empty;
+        var host = uri.Host;
+        var port = uri.Port > 0 ? uri.Port : 5432;
+        var database = uri.AbsolutePath.TrimStart('/');
+
+        var npgsqlBuilder = new Npgsql.NpgsqlConnectionStringBuilder
+        {
+            Host = host,
+            Port = port,
+            Database = database,
+            Username = username,
+            Password = password,
+            SslMode = Npgsql.SslMode.Prefer,
+            TrustServerCertificate = true
+        };
+
+        return npgsqlBuilder.ConnectionString;
+    }
+
+    return connectionString;
+}
+
 
