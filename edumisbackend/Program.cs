@@ -14,7 +14,13 @@ using System.Text;
 using edumisbackend.Common;
 using Scalar.AspNetCore;
 
+// Disable inotify FileSystemWatcher to prevent hitting Linux inotify limits in container environments (e.g. Render)
+Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "true");
+Environment.SetEnvironmentVariable("DOTNET_SYSTEM_IO_DISABLEFILEWATCHING", "true");
+
+
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Bind dynamically to PORT env var if provided (Render, Cloud Run, Heroku, etc.)
 var port = Environment.GetEnvironmentVariable("PORT");
@@ -49,7 +55,7 @@ builder.Services.AddScoped<SmcFileUploadHelper>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 if(!builder.Environment.IsProduction() && !builder.Environment.IsStaging()) 
-    builder.Services.AddScoped<IOtpService, FakeOtpService>();
+    builder.Services.AddScoped<IOtpService, OtpService>();
 else builder.Services.AddScoped<IOtpService, OtpService>();
 
 builder.Services.AddScoped<TokenHelper>();

@@ -32,6 +32,11 @@ services:
         value: https://education.delhi.gov.in
       - key: GOOGLE_APPLICATION_CREDENTIALS
         value: /etc/secrets/smc-service-account.json
+      - key: DOTNET_USE_POLLING_FILE_WATCHER
+        value: "true"
+      - key: DOTNET_SYSTEM_IO_DISABLEFILEWATCHING
+        value: "true"
+
 
 databases:
   - name: edumis-db

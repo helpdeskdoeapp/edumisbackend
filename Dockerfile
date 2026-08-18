@@ -38,5 +38,8 @@ COPY --from=publish /app/publish .
 # Set default ASP.NET Core environment variables
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV DOTNET_RUNNING_IN_CONTAINER=true
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
+ENV DOTNET_SYSTEM_IO_DISABLEFILEWATCHING=true
 
 ENTRYPOINT ["dotnet", "edumisbackend.dll"]
+
